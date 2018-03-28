@@ -10,8 +10,7 @@ const keys  = require('./config/keys');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const auth = require('./routes/auth-route');
-
-
+const answer= require('./routes/answerRoute');
 
 mongoose.connect(keys.mongodb.url)
     .then(()=> {
@@ -39,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/auth', auth);
-
+app.use('/answer', answer);
 
 
 // catch 404 and forward to error handler
