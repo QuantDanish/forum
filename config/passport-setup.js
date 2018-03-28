@@ -1,8 +1,10 @@
 
 const passport  =   require('passport');
+
 const GoogleStrategy    =   require('passport-google-oauth20');
 const LocalStrategy     =   require('passport-local').Strategy;
 const jwt   =   require('jsonwebtoken');
+
 
 const keys  =   require('./keys.js');
 const services  = require('../services/index');
