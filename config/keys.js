@@ -9,5 +9,8 @@ module.exports = {
     },
     mongodb: {
         url: 'mongodb://localhost:27017/forum'
+    },
+    token: {
+        salt: 'blah! blah!blah!'
     }
 }

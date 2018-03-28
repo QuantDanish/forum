@@ -1,10 +1,18 @@
 const mongoose=require('../config/mongooseConnection');
 
+<<<<<<< HEAD
 var question= mongoose.model('question',{
+=======
+var question= mongoose.model({'question',{
+  _id:{
+    type:Number
+  }
+
+>>>>>>> d741a5868d8f346660184e3268e1d62f0cdd7092
   question_text:{
     type:String,
-    trim: true,
-    required: true,
+    trim:true,
+    required:true,
     minlength:1
     },
   user_id:{
@@ -29,6 +37,11 @@ var question= mongoose.model('question',{
       type : Date,
     default: Date.now,
     required:true
+  },
+  views:{
+    type :Number,
+        required:true,
+          default :0,
   }
 });
 

@@ -5,18 +5,22 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose  = require('mongoose');
-
+const passport  = require('passport');
 const keys  = require('./config/keys');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const auth = require('./routes/auth-route');
 const answer= require('./routes/answerRoute');
+const user = require('./services/index').user;
+
+
 
 mongoose.connect(keys.mongodb.url)
     .then(()=> {
       // write script for the default admin.
+        console.log('Connected To DB..');
+        user.addAdmin();
 
-      console.log('Connected To DB..');
     }, (err)=> {
       console.log("Connection to DB Failed.", err);
     });
@@ -34,6 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(passport.initialize());
 
 app.use('/', index);
 app.use('/users', users);
