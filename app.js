@@ -13,7 +13,15 @@ const auth = require('./routes/auth-route');
 
 
 
-mongoose.connect(keys.mongodb.url);
+mongoose.connect(keys.mongodb.url)
+    .then(()=> {
+      // write script for the default admin.
+
+      console.log('Connected To DB..');
+    }, (err)=> {
+      console.log("Connection to DB Failed.", err);
+    });
+
 let app = express();
 
 // view engine setup
@@ -36,7 +44,7 @@ app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

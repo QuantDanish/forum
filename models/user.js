@@ -1,8 +1,7 @@
 const mongoose  =   require('mongoose');
+const validator =   require('validator');
 
-const Schema    =   mongoose.Schema;
-
-const userSchema=   new Schema({
+const userSchema=   new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -24,6 +23,9 @@ const userSchema=   new Schema({
     dob: {
         type: Object,
     },
+    google_id: {
+        type: String
+    },
     phone_number: {
         type: Number
     },
@@ -31,16 +33,16 @@ const userSchema=   new Schema({
         // implement a validator.
         type: String,
         required: true,
-        /*validate: {
-            validator: (email)=> {
-                return /\w+@\w.com/
-            }
-        }*/
+        validate: {
+            validator: validator.isEmail,
+            message: '{value} is not a valid email'
+        }
     },
     employee_id: {
 
         type: String,
-        required: true
+        required: true,
+        default: 'Not specified'
     },
     photo: {
         type: String
@@ -51,28 +53,35 @@ const userSchema=   new Schema({
     },
     title: {
         type: String,
-        required: true
+        /*required: true,*/
+        default: 'Not Specified'
     },
     practice_group: {
         type: String,
+        default: 'Not Specified'
     },
     about_me: {
-        type: String
+        type: String,
+        default: 'Not Specified'
     },
     department_id: {
         type: String,
-        required: true
+        default: 'Not Specified'
+        /*required: true*/
+
     },
     isblocked: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     isAdmin: {
         type: Boolean,
+        default: false,
         required: true
     }
 });
 
-const User  =   mongoose.model('user', userSchema);
+const User  =   mongoose.model('User', userSchema);
 
 module.exports = {User};

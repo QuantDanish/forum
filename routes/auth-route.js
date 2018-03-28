@@ -8,11 +8,11 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 
-// callback url for google
+// callback url for google. user will be given response from here after authentication.
 router.get('/google/redirect',
     passport.authenticate('google'),
     (req, res, next)=> {
-        res.send({message: 'you have successfully logged in'});
+        res.send({message: `${req.body.username}you have successfully logged in`});
 });
 
 module.exports =  router;
