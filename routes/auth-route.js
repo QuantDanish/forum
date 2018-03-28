@@ -10,9 +10,11 @@ router.get('/google', passport.authenticate('google', {
 
 // callback url for google. user will be given response from here after authentication.
 router.get('/google/redirect',
-    passport.authenticate('google'),
+    passport.authenticate('google', {
+        session:false
+    }),
     (req, res, next)=> {
-        res.send({message: `${req.body.username}you have successfully logged in`});
+        res.header('x-auth', req.authInfo._doc.token).send({message: `you have successfully logged in`});
 });
 
 module.exports =  router;

@@ -1,5 +1,7 @@
 const models    =   require('../models/index');
 
+
+
 let addUser = (profile)=> {
     return new Promise( (resolve, reject)=> {
         let newUser     =   new models.User({
@@ -20,9 +22,43 @@ let addUser = (profile)=> {
     });
 }
 
+// add admin
+let addAdmin  =   ()=> {
+
+    models.User.findOne({isAdmin: true})
+        .then( (doc)=> {
+            if( !doc) {
+                let admin   =   new models.User({
+                    username: 'nitn',
+                    firstname: 'Nitin',
+                    lastname: 'Jain',
+                    password: 'nitin1234',
+                    email_id: 'nitin.jain@quovantis.com',
+                    isAdmin: true,
+                    skype_id: 'nitin.jain.qvt',
+                    title: 'Trainee Software Engineer',
+                    practice_group: 'Open source',
+                    employee_id: 'QVT-17-1233'
+                });
+
+                admin.save()
+                    .then( (doc)=> {
+                        console.log('Admin Added successfully');
+                    }, (err)=> {
+                        console.log('Error while adding Admin :', err.message);
+                    });
+            }
+        },(err)=> {
+            console.log("Admin adding Error: ", err.message);
+        });
+
+}
+
+
+
 let findByGoogleId = (googleId)=> {
     return new Promise((resolve, reject)=> {
-        models.User.find({google_id: googleId})
+        models.User.findOne({google_id: googleId})
             .then((doc)=> {
                 resolve(doc);
             }, (err)=> {
@@ -34,5 +70,6 @@ let findByGoogleId = (googleId)=> {
 
 module.exports = {
     addUser,
-    findByGoogleId
+    findByGoogleId,
+    addAdmin
 }

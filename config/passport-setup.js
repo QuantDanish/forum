@@ -1,10 +1,14 @@
 
 const passport  =   require('passport');
-const GoogleStrategy  =   require('passport-google-oauth20');
-
+const GoogleStrategy    =   require('passport-google-oauth20');
+const LocalStrategy     =   require('passport-local').Strategy;
+const jwt   =   require('jsonwebtoken');
 
 const keys  =   require('./keys.js');
 const services  = require('../services/index');
+
+
+
 
 
 //  Google Open Authentication 2.0-----------------------------------------
@@ -20,10 +24,10 @@ passport.use( new GoogleStrategy({
 
                 if(doc) {
                     // user found in db.
-                    services.token.addToken(accessToken, doc._id)
+                    services.token.addToken(jwt.sign( doc._id.toString(), keys.token.salt), doc._id)
                         .then((doc)=> {
                             // new token added.
-                            done(null, profile);
+                            done(null, doc, doc);
                         }, (err)=> {
                             console.log("Token Write Error: ",err);
                             done(err);
@@ -32,9 +36,9 @@ passport.use( new GoogleStrategy({
                     // user found in db. Adding new User in db.
                     services.user.addUser(profile)
                         .then( (doc)=> {
-                            services.token.addToken(accessToken, doc._id)
+                            services.token.addToken(jwt.sign( doc._id.toString(), keys.token.salt), doc._id)
                                 .then( (doc)=> {
-                                    done(null, profile);
+                                    done(null, doc, doc);
                                 },(err)=> {
                                     console.log("Token Write Error (New User): ",err);
                                     done(err);

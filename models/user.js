@@ -20,6 +20,16 @@ const userSchema=   new mongoose.Schema({
         minlength: 1,
         trim: true,
     },
+    password: {
+        type: String,
+        minlength: 6,
+        maxlength: 15,
+        trim: true,
+        validate: {
+            validator: validator.isAlphanumeric,
+            message: '{value} is not a valid password'
+        }
+    },
     dob: {
         type: Object,
     },
