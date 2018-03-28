@@ -9,7 +9,44 @@ const jwt   =   require('jsonwebtoken');
 const keys  =   require('./keys.js');
 const services  = require('../services/index');
 
+/*  ===========     Local Stategy =====================
+* */
+passport.use( new LocalStrategy(( username, password, done)=> {
+    services.user.find({username, password})
+        .then( (user)=> {
+            if(!user){
+                // user does not exits.
+                done(null, false, {
+                    login: false,
+                    message: `Either Username or password is incorrect.`
+                });
+            } else {
+                // user found in db. Generating token to save in DB.
+                services.token.addToken(jwt.sign( user._id.toString(), keys.token.salt), user._id)
+                    .then( (doc)=> {
 
+                        done(null, doc,{
+                            login: true,
+                            message: `${user.username} have logged in successfully.`,
+                            token: doc.token
+                        });
+
+                    },(err)=> {
+                        console.log("Token Write Error (New User): ",err);
+                        done(null, user, {
+                            login: false,
+                            message: `Token Generation Error`
+                        });
+                    })
+
+            }
+
+        })
+        .catch( (err)=> {
+            console.log('Error in user searching: ',err.message);
+            done(err);
+        })
+}));
 
 
 
@@ -21,7 +58,7 @@ passport.use( new GoogleStrategy({
     }, (accessToken, refreshToken, profile, done)=> {
 
         // find user in db
-        services.user.findByGoogleId(profile.id)
+        services.user.find({google_id: profile.id})
             .then((doc)=> {
 
                 if(doc) {
@@ -36,7 +73,7 @@ passport.use( new GoogleStrategy({
                         });
                 } else {
                     // user found in db. Adding new User in db.
-                    services.user.addUser(profile)
+                    services.user.addGoogleUser(profile)
                         .then( (doc)=> {
                             services.token.addToken(jwt.sign( doc._id.toString(), keys.token.salt), doc._id)
                                 .then( (doc)=> {

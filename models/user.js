@@ -31,7 +31,7 @@ const userSchema=   new mongoose.Schema({
         }
     },
     dob: {
-        type: Object,
+        type: Number,
     },
     google_id: {
         type: String

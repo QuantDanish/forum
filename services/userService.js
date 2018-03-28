@@ -2,7 +2,7 @@ const models    =   require('../models/index');
 
 
 
-let addUser = (profile)=> {
+let addGoogleUser = (profile)=> {
     return new Promise( (resolve, reject)=> {
         let newUser     =   new models.User({
             google_id: profile.id,
@@ -54,11 +54,13 @@ let addAdmin  =   ()=> {
 
 }
 
+let addUser = ()=> {
 
+}
 
-let findByGoogleId = (googleId)=> {
+let find = (info)=> {
     return new Promise((resolve, reject)=> {
-        models.User.findOne({google_id: googleId})
+        models.User.findOne(info)
             .then((doc)=> {
                 resolve(doc);
             }, (err)=> {
@@ -67,9 +69,36 @@ let findByGoogleId = (googleId)=> {
     });
 }
 
+let findAndAdd = (user)=> {
+    return new Promise( (resolve, reject)=> {
+        find({username: user.username}).then((doc)=> {
+            if(doc){
+                // user already exists.
+                return resolve({
+                    message: `${user.username} ! you have already registered`
+                })
+            }
+
+            if(!doc) {
+                // new user sign up
+                let newUser = new models.User( user);
+                newUser.save().then((doc)=> {
+                    return resolve({
+                        message: `${doc.username} ! Registration Successful`
+                    });
+                })
+            }
+
+        }).catch( (err)=> {
+            return reject(err);
+        });
+    });
+}
+
 
 module.exports = {
-    addUser,
-    findByGoogleId,
-    addAdmin
+    addGoogleUser,
+    find,
+    addAdmin,
+    findAndAdd
 }
