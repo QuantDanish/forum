@@ -1,9 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
+var questionRoute = require('./questionRoute');
+
+
+var answer= require('./answerRoute');
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+
+
+router.use('/ques',questionRoute);
+
+router.use('/answer',answer);
+
 
 module.exports = router;

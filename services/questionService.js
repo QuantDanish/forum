@@ -1,52 +1,82 @@
-var mongoose = require('./config/mongooseConnection');
-var quesSchema= require('./models/question.js')
-function addQuestion(addQues){
+//var mongoose = require('./config/mongooseConnection');
+var mongoose=require('mongoose');
+var quesSchema= require('../models/question')
+
+function addQuestion(addQues,cb){
     let question= new quesSchema({
-        question_text:,
-        user_id:,
-        practice_group_id:,
-        question_category_id:,
-        tags:,
-        views:,
+        question_text:addQues.question_text,
+        user_id:addQues.user_id,
+        practice_group_id:addQues.practice_group_id,
+        question_category_id:addQues.question_category_id,
+        tags:null,
+        views:0,
     })
-
-     question.save().then((doc)=>{
-         res.send(doc);
-     },(e)=>{
-         res.status(400).send(e);
-     })
+    quesSchema.find({question_text:question.question_text,user_id:question.user_id})
+        .then((quesArray)=> {
+            if (quesArray.length!==0) {
+                console.log("same ques");
+                cb("question already exists by the same user")
+            }
+            else {
+                question.save().then((doc) => {
+                    console.log("doc" + doc);
+                    cb(doc);
+                }, (e) => {
+                    console.log(e);
+                    cb("error occured can't add question")
+                })
+            }
+        })
 }
 
-function editQuestion(question){
-    let oldValue={};
-    let newValue={$set:{}};
-    question.findByIdAndUpdate(oldValue,newValue).then((updateque)=>{
-        if(!updateque){
-            return res.status(404).send()
-        }
-        res.send(updateque);
 
+
+function getQuestionByPG(practiceGroupId,cb){
+        quesSchema.find({practice_group_id :practiceGroupId}).then((myArray)=>{
+            if(myArray.length===0){
+                console.log("no ques till now of this deptt");
+                cb("no ques till now of this deptt");
+            }
+            else{
+                cb(myArray);
+            }
+
+        }).catch((e)=>{
+            console.log(e);
+            cb ("error occured");
+    });
+}
+
+
+function editQuestion(question,cb){
+    let oldValue={_id:question._id, user_id:question.user_id};
+    let newValue={$set:{question_text:question.question_text,practice_group_id:question.practice_group_id}};
+    quesSchema.findByIdAndUpdate(oldValue,newValue).then((updateque)=>{
+        cb(updateque)
     }).catch((e)=>{
-       res.send(400).send(e);
+      cb(e);
     })
+}
 
+function deleteQuestion(que_id,cb){
+
+    quesSchema.findByIdAndRemove({_id:que_id}).then((delQues)=>{
+        if(!delQues){
+            cb("ques doesn't exist");
+        }
+        cb(delQues)
+    }).catch((e)=>{
+        cb(e);
+    })
 
 }
 
-function deleteQuestion(que_id){
 
-    question.findByIdAndRemove(ques_id).then((delQues)=>{
-        if(!delQues){
-           return res.status(404).send()
-        }
-        res.send(delQues);
-    })
-        .catch((e)=>{
-        res.send(400).send(e);
-    })
+module.exports={
+    addQuestion:addQuestion,
+    editQuestion:editQuestion,
+    deleteQuestion:deleteQuestion,
+    getQuestionByPG:getQuestionByPG
 
-    }
-
-
-
+}
 
