@@ -1,5 +1,9 @@
 const models    =   require('../models/index');
 
+/*  Logout user. Removes token form database*/
+let logout = (token)=> {
+    return models.Token.findOneAndRemove({token});
+}
 
 
 let addGoogleUser = (profile)=> {
@@ -69,6 +73,10 @@ let find = (info)=> {
     });
 }
 
+let findById    =   (id)=> {
+    return models.User.findById(id)
+}
+
 let findAndAdd = (user)=> {
     return new Promise( (resolve, reject)=> {
         find({username: user.username}).then((doc)=> {
@@ -96,9 +104,14 @@ let findAndAdd = (user)=> {
 }
 
 
+
+
+
 module.exports = {
     addGoogleUser,
     find,
     addAdmin,
-    findAndAdd
+    findAndAdd,
+    findById,
+    logout
 }

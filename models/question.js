@@ -1,4 +1,4 @@
-const mongoose=require('../config/mongooseConnection');
+const mongoose= require('mongoose');
 
 
 var question= mongoose.model('question',{

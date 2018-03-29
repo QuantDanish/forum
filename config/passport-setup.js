@@ -3,7 +3,7 @@ const passport  =   require('passport');
 
 const GoogleStrategy    =   require('passport-google-oauth20');
 const LocalStrategy     =   require('passport-local').Strategy;
-const jwt   =   require('jsonwebtoken');
+const uuidv1    =   require('uuid/v1');
 
 
 const keys  =   require('./keys.js');
@@ -22,7 +22,7 @@ passport.use( new LocalStrategy(( username, password, done)=> {
                 });
             } else {
                 // user found in db. Generating token to save in DB.
-                services.token.addToken(jwt.sign( user._id.toString(), keys.token.salt), user._id)
+                services.token.addToken(uuidv1(), user._id)
                     .then( (doc)=> {
 
                         done(null, doc,{
@@ -63,7 +63,7 @@ passport.use( new GoogleStrategy({
 
                 if(doc) {
                     // user found in db.
-                    services.token.addToken(jwt.sign( doc._id.toString(), keys.token.salt), doc._id)
+                    services.token.addToken(uuidv1(), doc._id)
                         .then((doc)=> {
                             // new token added.
                             done(null, doc, doc);
@@ -75,7 +75,7 @@ passport.use( new GoogleStrategy({
                     // user found in db. Adding new User in db.
                     services.user.addGoogleUser(profile)
                         .then( (doc)=> {
-                            services.token.addToken(jwt.sign( doc._id.toString(), keys.token.salt), doc._id)
+                            services.token.addToken(uuidv1(), doc._id)
                                 .then( (doc)=> {
                                     done(null, doc, doc);
                                 },(err)=> {
