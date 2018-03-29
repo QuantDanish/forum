@@ -1,9 +1,6 @@
-const mongoose=require('../config/mongooseConnection');
-
-var question= mongoose.model({'question',{
-  _id:{
-    type:Number
-  }
+//const mongoose=require('../config/mongooseConnection');
+const mongoose= require('mongoose');
+var question= mongoose.model('question',{
 
   question_text:{
     type:String,
@@ -32,18 +29,16 @@ var question= mongoose.model({'question',{
     time :{
       type : Date,
     default: Date.now,
-    required:true
+   // required:true
   },
   views:{
     type :Number,
-        required:true,
+        //required:true,
           default :0,
   }
 
 
 }
-});
+);
 
-module.exports={
-  question
-};
+module.exports= question;

@@ -1,6 +1,6 @@
 const mongoose=require('../config/mongooseConnection');
 
-var answer= mongoose.model({'answer',{
+var answer= mongoose.model('answer',{
     answer_text:{
         type:String,
             trim: true,
@@ -22,7 +22,7 @@ var answer= mongoose.model({'answer',{
           default: Date.now,
           required:true
     }
-}
+
 });
 
 module.exports={
