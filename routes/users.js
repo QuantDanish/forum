@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const services  =   require('../services/index');
-
+const middleware= require('../middleware/index');
 
 
 
@@ -18,5 +18,16 @@ router.post('/', (req, res, next)=> {
             next(err);
         });
 });
+
+/*  POST logout
+* */
+router.post('/logout', (req, res, next)=> {
+    services.user.logout(req.header('x-auth')).then((doc)=> {
+        res.send({message: `you have been logged out.`});
+    }).catch((err)=> {
+        next(err);
+    })
+});
+
 
 module.exports = router;
