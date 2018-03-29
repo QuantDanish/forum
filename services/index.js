@@ -1,5 +1,9 @@
 module.exports = {
     user: require('./userService'),
     token: require('./tokenService'),
-    questionService:require('./questionService')
+
+    questionService:require('./questionService'),
+
+    answerService: require('./answerService')
+
 }

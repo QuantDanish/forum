@@ -1,8 +1,0 @@
-
-
-
-
-
-module.exports={
-    mongoose : mongoose
-};

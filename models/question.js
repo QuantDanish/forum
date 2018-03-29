@@ -1,7 +1,12 @@
+
 //const mongoose=require('../config/mongooseConnection');
 const mongoose= require('mongoose');
-var question= mongoose.model('question',{
 
+
+
+
+
+var question= mongoose.model('question',{
   question_text:{
     type:String,
     trim:true,
@@ -37,8 +42,9 @@ var question= mongoose.model('question',{
           default :0,
   }
 
-
 }
 );
+
+
 
 module.exports= question;

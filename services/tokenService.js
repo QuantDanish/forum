@@ -17,6 +17,26 @@ let addToken    =   (token, userId)=> {
     });
 }
 
+
+/*  search for token document in db     */
+let findToken   =   (userToken)=> {
+    return new Promise((resolve, reject)=> {
+        models.Token.findOne({
+            token: userToken
+        }).then((doc)=> {
+            if(doc) return resolve(doc);
+
+            let err     =   new Error('Authentication required');
+            err.status = 401;
+            reject( err);
+        }).catch((err)=> {
+            return reject(err);
+        })
+    });
+}
+
+
 module.exports = {
     addToken,
+    findToken
 }
