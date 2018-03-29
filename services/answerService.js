@@ -1,58 +1,92 @@
-const mongoose=require('../config/mongooseConnection');
-const AnswerSchema =require('../models/answer');
+const express= require('express');
+const router= express.Router();
+const {answer} =require('../models/index');
 const _= require('lodash');
+const mongoose=require('mongoose');
+
+
 // const {ObjectID}= require('mongodb');
+var addAnswer= (ans)=>{
+    return new Promise((resolve, reject) => {
+      //  console.log(ans);
+        var newans= new answer({
+            _id:ans._id,
+            answer_text:ans.text ,
+            question_id:ans.question_id ,
+            user_id: ans.user_id
+        });
+      //  console.log("newans"+newans);
 
-function addAnswer(ans){
-var newans= new AnswerSchema({
-    text:ans.text ,
-    question_id:ans.question_id ,
-    user_id: ans.user_id
-});
+        newans.save().then((doc)=>{
+            resolve(doc);
+        }).catch((e)=>{
+            reject(e)
+        });
 
- newans.save().then((doc)=>{
-    console.log('Your answer has been submitted');
-    },(e)=>{console.log('Oops!...Error in submitting answer.');}
-    )
-}
-function deleteAnswer(id){
-
-    // if (!mongoose.Types.ObjectId.isValid(id)) {
-    //     return res.status(404).send();
-    // }
-
-    answer.findByIdAndRemove(id).then((delAns) => {
-        if (!delAns) {
-            return res.status(404).send();
-        }
-
-        res.send(delAns);
-    }).catch((e) => {
-        res.status(400).send();
     });
+};
 
-}
-function updateAnswer(req){
-    // if (!mongoose.Types.ObjectId.isValid(id)) {
-    //     return res.status(404).send();
-    // }
+var deleteAnswer= (id)=>{
+    return new Promise((resolve, reject) => {
 
-    var body = _.pick(req.body, ['text', 'modifiedAt']);
-    body.modifiedAt= new Date.now();
-    answer.findByIdAndUpdate(id,{$set: body}, {new: true}).then((updated_data)=>{
-        if (!updated_data) {
-            return res.status(404).send();
-        }
-        console.log(updated_data);
-    }).catch((e)=>{
-        res.status(400).send();
-    })
+        // if (!mongoose.Types.ObjectId.isValid(id)) {
+        //     return res.status(404).send();
+        // }
 
-}
+        answer.findByIdAndRemove(id).then((delAns) => {
+            if (!delAns) {
+                reject();
+            }
 
-function readAnswer(qid) {
-    if (!id) {
-        return res.send('Enter valid Question id to read answers');
-    }
-    answer.find({question_id:{qid}});
-}
+            resolve(delAns);
+        }).catch((e) => {
+            reject(e);
+        });
+    });
+};
+
+
+let updateAnswer= (req)=>{
+    return new Promise((resolve, reject) => {
+
+        // if (!mongoose.Types.ObjectId.isValid(id)) {
+        //     return res.status(404).send();
+        // }
+
+        var body = _.pick(req.body,['answer_text', 'modifiedAt']);
+        body.modifiedAt= Date.now();
+        let _id= req.body._id;
+        console.log(body);
+        answer.findByIdAndUpdate(_id,{$set: body}, {new: true}).then((doc)=>{
+            resolve(doc);
+        }).catch((e)=>{reject(e);})
+
+    });
+ };
+
+
+let readAnswer=(id)=>{
+  return new Promise((resolve, reject) => {
+
+      answer.find({'question_id':id}).then((doc)=>{
+          resolve(doc);
+      }).catch((err)=>{
+          reject(err);
+      })
+
+  });
+};
+//
+// function readAnswer(qid) {
+//     if (!id) {
+//         return res.send('Enter valid Question id to read answers');
+//     }
+//     answer.find({question_id:{qid}});
+// }
+
+module.exports={
+    addAnswer,
+    deleteAnswer,
+    updateAnswer,
+    readAnswer
+};

@@ -1,14 +1,7 @@
 const mongoose=require('../config/mongooseConnection');
 
-<<<<<<< HEAD
-var question= mongoose.model('question',{
-=======
-var question= mongoose.model({'question',{
-  _id:{
-    type:Number
-  }
 
->>>>>>> d741a5868d8f346660184e3268e1d62f0cdd7092
+var question= mongoose.model('question',{
   question_text:{
     type:String,
     trim:true,

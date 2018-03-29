@@ -1,10 +1,7 @@
-const {mongoose}=require('../config/mongooseConnection');
+const mongoose=require('mongoose');
 
-var answer= mongoose.model('answer',{
-    _id:{
-    type:Number
-    },
-    answer_text:{
+var answerSchema= new mongoose.Schema({
+       answer_text:{
         type:String,
         trim: true,
         required: true,
@@ -21,15 +18,17 @@ var answer= mongoose.model('answer',{
         required:true
     },
     time :{
-        type : Date,
+        type : Number,
         default: Date.now,
         required: true
     },
     modifiedAt:{
-    type: Date
+        type: Number,
+        default:Date.now()
     }
 });
 
-module.exports={
-    answer
-};
+
+const answer  =   mongoose.model('answer', answerSchema);
+
+module.exports= answer;
