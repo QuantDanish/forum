@@ -11,7 +11,9 @@ let isLoggedIn  =   (req, res, next)=> {
         next(err);
     })
 }
-
+/*
+*   router.get('/',isAdmin,(req, res, next)=>);
+* */
 
 
 /*    Middleware authenticating admin   */

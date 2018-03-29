@@ -1,6 +1,5 @@
 
 const passport  =   require('passport');
-
 const GoogleStrategy    =   require('passport-google-oauth20');
 const LocalStrategy     =   require('passport-local').Strategy;
 const uuidv1    =   require('uuid/v1');

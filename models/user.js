@@ -49,7 +49,6 @@ const userSchema=   new mongoose.Schema({
         }
     },
     employee_id: {
-
         type: String,
         required: true,
         default: 'Not specified'

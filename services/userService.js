@@ -58,19 +58,9 @@ let addAdmin  =   ()=> {
 
 }
 
-let addUser = ()=> {
-
-}
 
 let find = (info)=> {
-    return new Promise((resolve, reject)=> {
-        models.User.findOne(info)
-            .then((doc)=> {
-                resolve(doc);
-            }, (err)=> {
-                reject(err);
-            })
-    });
+    return models.User.findOne(info)
 }
 
 let findById    =   (id)=> {

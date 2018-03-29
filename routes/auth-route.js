@@ -4,16 +4,6 @@ const passportSetup = require('../config/passport-setup');
 
 
 
-router.post('/local', passport.authenticate('local',
-    {session: false}),
-    (req, res, next)=> {
-        if(req.authInfo.login) {
-            res.header('x-auth', req.authInfo.token)
-        }
-        res.send(req.authInfo.message);
-    }
-);
-
 
 router.get('/google', passport.authenticate('google', {
     scope: ['profile','email']
