@@ -1,6 +1,6 @@
-//var mongoose = require('./config/mongooseConnection');
-var mongoose=require('mongoose');
-var quesSchema= require('../models/question')
+
+const mongoose  =   require('mongoose');
+const quesSchema= require('../models/question')
 
 function addQuestion(addQues,cb){
     let question= new quesSchema({
@@ -10,7 +10,7 @@ function addQuestion(addQues,cb){
         question_category_id:addQues.question_category_id,
         tags:null,
         views:0,
-    })
+    });
     quesSchema.find({question_text:question.question_text,user_id:question.user_id})
         .then((quesArray)=> {
             if (quesArray.length!==0) {
@@ -23,10 +23,10 @@ function addQuestion(addQues,cb){
                     cb(doc);
                 }, (e) => {
                     console.log(e);
-                    cb("error occured can't add question")
+                    cb("error occurred can't add question");
                 })
             }
-        })
+        });
 }
 
 
@@ -59,7 +59,6 @@ function editQuestion(question,cb){
 }
 
 function deleteQuestion(que_id,cb){
-
     quesSchema.findByIdAndRemove({_id:que_id}).then((delQues)=>{
         if(!delQues){
             cb("ques doesn't exist");
@@ -78,5 +77,5 @@ module.exports={
     deleteQuestion:deleteQuestion,
     getQuestionByPG:getQuestionByPG
 
-}
+};
 

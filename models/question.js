@@ -1,9 +1,4 @@
-
-//const mongoose=require('../config/mongooseConnection');
 const mongoose= require('mongoose');
-
-
-
 
 
 var question= mongoose.model('question',{
@@ -32,18 +27,16 @@ var question= mongoose.model('question',{
       type :Object
     },
     time :{
-      type : Date,
-    default: Date.now,
-   // required:true
+      type : Number,
+      default: Date.now,
+      required:true
   },
   views:{
     type :Number,
-        //required:true,
-          default :0,
+    required:true,
+    default :0,
   }
-
-}
-);
+});
 
 
 
