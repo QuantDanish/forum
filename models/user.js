@@ -43,6 +43,7 @@ const userSchema=   new mongoose.Schema({
         // implement a validator.
         type: String,
         required: true,
+        unique: true,
         validate: {
             validator: validator.isEmail,
             message: '{value} is not a valid email'

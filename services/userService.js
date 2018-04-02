@@ -33,7 +33,7 @@ let addAdmin  =   ()=> {
         .then( (doc)=> {
             if( !doc) {
                 let admin   =   new models.User({
-                    username: 'nitn',
+                    username: 'nitin',
                     firstname: 'Nitin',
                     lastname: 'Jain',
                     password: 'nitin1234',
@@ -42,7 +42,8 @@ let addAdmin  =   ()=> {
                     skype_id: 'nitin.jain.qvt',
                     title: 'Trainee Software Engineer',
                     practice_group: 'Open source',
-                    employee_id: 'QVT-17-1233'
+                    employee_id: 'QVT-17-1233',
+                    dob: Date.now()
                 });
 
                 admin.save()
@@ -72,21 +73,23 @@ let findAndAdd = (user)=> {
         find({username: user.username}).then((doc)=> {
             if(doc){
                 // user already exists.
-                return resolve({
-                    message: `${user.username} ! you have already registered`
-                })
+                let err     =   new Error(`${user.username} ! you have already registered`)
+                err.status = 409; //conflict.
+                return reject(err);
             }
 
             if(!doc) {
                 // new user sign up
+                user.username = user.username;
                 let newUser = new models.User( user);
                 newUser.save().then((doc)=> {
                     return resolve({
                         message: `${doc.username} ! Registration Successful`
                     });
-                })
+                },(err)=> {
+                    return reject(err)
+                });
             }
-
         }).catch( (err)=> {
             return reject(err);
         });

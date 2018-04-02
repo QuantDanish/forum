@@ -13,7 +13,7 @@ let isLoggedIn  =   (req, res, next)=> {
 }
 /*
 *   router.get('/',isAdmin,(req, res, next)=>);
-* */
+*/
 
 
 /*    Middleware authenticating admin   */
@@ -32,8 +32,4 @@ let isAdmin     =   (req, res, next)=> {
 }
 
 
-
-module.exports = {
-    isLoggedIn,
-    isAdmin
-}
+module.exports = [isLoggedIn,isAdmin]

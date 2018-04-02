@@ -11,8 +11,11 @@ const services  = require('../services/index');
 /*  ===========     Local Stategy =====================
 * */
 passport.use( new LocalStrategy(( username, password, done)=> {
-    services.user.find({username, password})
-        .then( (user)=> {
+    username = username.toUpperCase();
+    services.user.find({
+        'username': { $regex : new RegExp(username, "i") },
+        'password': password
+    }).then( (user)=> {
             if(!user){
                 // user does not exits.
                 done(null, false, {
@@ -21,6 +24,10 @@ passport.use( new LocalStrategy(( username, password, done)=> {
                 });
             } else {
                 // user found in db. Generating token to save in DB.
+
+                if(user.isblocked) done(new Error('User Blocked'));
+
+
                 services.token.addToken(uuidv1(), user._id)
                     .then( (doc)=> {
 
@@ -62,6 +69,12 @@ passport.use( new GoogleStrategy({
 
                 if(doc) {
                     // user found in db.
+                    //if user is blocked.
+                    if(doc._doc.isblocked){
+                        done(new Error('User Blocked'));
+                    }
+
+
                     services.token.addToken(uuidv1(), doc._id)
                         .then((doc)=> {
                             // new token added.

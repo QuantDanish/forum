@@ -1,2 +1,2 @@
-var login   =   require('./login');
-module.exports = {login}
+const authorize   =   require('./login');
+module.exports = {authorize};
