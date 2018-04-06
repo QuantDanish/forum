@@ -6,9 +6,14 @@ Run commands to install dependencies.
 
 `npm install`
 
+
  // adding something by windows
 
 Next start working with it
 
 
+
+
+
+something to add by Rajat;
 
